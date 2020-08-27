@@ -3,6 +3,7 @@ start:
 
 setup:
 	composer install
+	php artisan key:gen --ansi
 	npm install
 
 watch:
