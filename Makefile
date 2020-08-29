@@ -22,6 +22,9 @@ log:
 test:
 	php artisan test
 
+test-coverage:
+	composer phpunit tests -- --coverage-clover build/logs/clover.xml
+
 deploy:
 	git push heroku
 

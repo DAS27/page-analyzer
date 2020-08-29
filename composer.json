@@ -50,6 +50,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "scripts": {
+        "phpunit": "phpunit",
         "phpcs": "phpcs",
         "phpcbf": "phpcbf",
         "post-autoload-dump": [
