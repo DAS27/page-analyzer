@@ -1,4 +1,4 @@
-name: Master workflow
+name: PHP CI
 
 on:
   pull_request:
@@ -24,4 +24,12 @@ jobs:
       run: make lint
 
     - name: Execute tests (Unit and Feature tests) via PHPUnit
-      run: make test
+      uses: paambaati/codeclimate-action@v2.6.0
+      # Add Code Climate secret key
+      env:
+        CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+      with:
+        coverageCommand: make test-coverage
+        coverageLocations: ${{github.workplace}}/build/logs/clover.xml:clover
+        debug: true
+
