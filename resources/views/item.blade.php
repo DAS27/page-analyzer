@@ -10,7 +10,6 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-
 </head>
 <body class="d-flex flex-column">
 <header>
@@ -22,34 +21,59 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link active" href="https://php-l3-page-analyzer.herokuapp.com">Home</a>
+                    <a class="nav-link active" href="{{ route('home') }}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link " href="https://php-l3-page-analyzer.herokuapp.com/domains">Domains</a>
+                    <a class="nav-link " href="{{ route('domains') }}">Domains</a>
                 </li>
             </ul>
         </div>
     </nav>
 </header>
-
 <main class="flex-grow-1">
-    <div class="jumbotron jumbotron-fluid bg-dark">
-        <div class="container-lg">
-            <div class="row">
-                <div class="col-12 col-md-10 col-lg-8 mx-auto text-white">
-                    <h1 class="display-3">Page Analyzer</h1>
-                    <p class="lead">Check web pages for free</p>
-                    <form action="https://php-l3-page-analyzer.herokuapp.com/domains" method="post" class="d-flex justify-content-center">
-                        <input type="hidden" name="_token" value="C1CLnOF7VvypPlFILWL3joG23GrfZGlsNlRxQId7">
-                        <input type="text" name="domain[name]" value="" class="form-control form-control-lg" placeholder="https://www.example.com">
-                        <button type="submit" class="btn btn-lg btn-primary ml-3 px-5 text-uppercase">Check</button>
-                    </form>
-                </div>
-            </div>
+    <div class="alert alert-info" role="alert">
+        @include('flash::message')
+        <p>Url has been added</p>
+    </div>
+
+    <div class="container-lg">
+        <h1 class="mt-5 mb-3"></h1>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover text-nowrap">
+                <tbody><tr>
+                    <td>id</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>name</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>created_at</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>updated_at</td>
+                    <td></td>
+                </tr>
+                </tbody></table>
         </div>
+        <h2 class="mt-5 mb-3">Checks</h2>
+        <form method="post" action="https://php-l3-page-analyzer.herokuapp.com/domains/285/checks">
+            <input type="hidden" name="_token" value="C1CLnOF7VvypPlFILWL3joG23GrfZGlsNlRxQId7">            <input type="submit" class="btn btn-primary" value="Run check">
+        </form>
+        <table class="table table-bordered table-hover text-nowrap">
+            <tbody><tr>
+                <th>Id</th>
+                <th>Status Code</th>
+                <th>h1</th>
+                <th>Keywords</th>
+                <th>Description</th>
+                <th>Created At</th>
+            </tr>
+            </tbody></table>
     </div>
 </main>
-
 <footer class="border-top py-3 mt-5">
     <div class="container-lg">
         <div class="text-center">

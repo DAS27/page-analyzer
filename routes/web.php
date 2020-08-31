@@ -14,5 +14,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('home');
+})->name('home');
+
+Route::get('/domains', function () {
+    return view('domains');
+})->name('domains');
+
+Route::post('/domains/{id}', function () {
+    return view('item');
+})->name('');
