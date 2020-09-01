@@ -24,14 +24,14 @@ class DomainRequest extends FormRequest
     public function rules()
     {
         return [
-            'domain[name]' => 'required|active_url'
+            'domain.name' => 'required|min:10|max:20|active_url'
         ];
     }
 
     public function messages()
     {
         return [
-            'domain[name].required' => 'Not a valid url',
+            'domain.name.required' => 'Not a valid url',
         ];
     }
 }

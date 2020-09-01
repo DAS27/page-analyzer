@@ -3,9 +3,9 @@
 
 @section('content')
     <main class="flex-grow-1">
-        @if($errors->any())
+        @if ($errors->any())
             <div class="alert alert-danger">
-                @foreach($errors->all() as $error)
+                @foreach ($errors->all() as $error)
                     {{ $error }}
                 @endforeach
             </div>
@@ -16,9 +16,9 @@
                     <div class="col-12 col-md-10 col-lg-8 mx-auto text-white">
                         <h1 class="display-3">Page Analyzer</h1>
                         <p class="lead">Check web pages for free</p>
-                        <form action="{{ route('domains') }}" method="post" class="d-flex justify-content-center">
+                        <form action="{{ route('domains.store') }}" method="post" class="d-flex justify-content-center">
                             @csrf
-                            <input type="text" name="name" value="" class="form-control form-control-lg" placeholder="https://www.example.com">
+                            <input type="text" name="domain[name]" value="" class="form-control form-control-lg" placeholder="https://www.example.com">
                             <button type="submit" class="btn btn-lg btn-primary ml-3 px-5 text-uppercase">Check</button>
                         </form>
                     </div>
