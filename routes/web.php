@@ -17,10 +17,13 @@ Route::get('/', function () {
     return view('home');
 })->name('home');
 
+//Route::view('/', 'home')->name('home');
+
 Route::get('/domains', function () {
     return view('domains');
 })->name('domains');
 
-Route::post('/domains/{id}', function () {
-    return view('item');
-})->name('');
+Route::post('/domains', 'DomainController@check')->name('domains.show');
+//Route::post('/domains', function () {
+//    return dd(Request::all());
+//})->name('domains.show');
