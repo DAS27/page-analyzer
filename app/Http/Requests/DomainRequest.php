@@ -24,7 +24,7 @@ class DomainRequest extends FormRequest
     public function rules()
     {
         return [
-            'domain.name' => 'required|min:10|max:100|active_url'
+            'domain.name' => 'required'
         ];
     }
 
