@@ -3,10 +3,8 @@
 
 @section('content')
     <main class="flex-grow-1">
-        <div class="alert alert-info" role="alert">
-            @include('flash::message')
-            <p>Url has been added</p>
-        </div>
+        @include('flash::message')
+
 
         <div class="container-lg">
             <h1 class="mt-5 mb-3">Site: {{ $domain->name }}</h1>
