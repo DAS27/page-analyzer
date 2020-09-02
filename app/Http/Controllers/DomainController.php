@@ -21,9 +21,10 @@ class DomainController extends Controller
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now()]
             );
-
+            flash('Url has been added');
             return redirect()->route('domain.show', [$id]);
         }
+        flash('Url already exists');
         return redirect()->route('domain.show', [$domain->id]);
     }
 
