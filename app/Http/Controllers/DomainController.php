@@ -2,41 +2,45 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\DomainRequest;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class DomainController extends Controller
 {
-    public function check(DomainRequest $request)
-    {
-        $url = parse_url($request->input('domain.name'));
-        ['scheme' => $scheme, 'host' => $host] = $url;
-        $domainName = "{$scheme}://{$host}";
-        $domain = DB::table('domains')->where('name', $domainName)->first();
-        if (DB::table('domains')->where('name', $domainName)->doesntExist()) {
-            $id = DB::table('domains')->insertGetId(
-                [
-                    'name' => strtolower($domainName),
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now()]
-            );
-            flash('Url has been added');
-            return redirect()->route('domain.show', [$id]);
-        }
-        flash('Url already exists');
-        return redirect()->route('domain.show', [$domain->id]);
-    }
-
     public function index()
-    {
-        return view('home');
-    }
-
-    public function store()
     {
         $domains = DB::table('domains')->get();
         return view('domains', compact('domains'));
+    }
+
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|max:255'
+        ]);
+        if ($validator->fails()) {
+            flash('Not a valid url')->error();
+        }
+        $domain = $validator->validate();
+        $url = parse_url($domain['name']);
+        ['scheme' => $scheme, 'host' => $host] = $url;
+        $normalizedUrl = strtolower("{$scheme}://{$host}");
+        $existingDomain = DB::table('domains')->where('name', $normalizedUrl)->first();
+        if ($existingDomain) {
+            flash('Url already exists')->warning();
+            return redirect()->route('domain.show', [$existingDomain->id]);
+        }
+        $id = DB::table('domains')->insertGetId(
+            [
+                'name' => $normalizedUrl,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ]
+        );
+        flash('Url has been added')->success();
+        return redirect()->route('domain.show', [$id]);
     }
 
     public function show($id)
