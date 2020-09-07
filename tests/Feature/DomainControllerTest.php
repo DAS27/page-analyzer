@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use Faker\Factory;
+use Faker\Provider\Base;
 use Tests\TestCase;
 use Faker\Generator;
 
@@ -14,7 +15,6 @@ class DomainControllerTest extends TestCase
     {
         parent::setUp();
         $this->faker = Factory::create();
-        $this->seed();
     }
 
     public function testIndex()
@@ -38,7 +38,7 @@ class DomainControllerTest extends TestCase
 
     public function testShow()
     {
-        $id = $this->faker->randomDigitNot(0);
+        $id = Base::randomDigitNot(0);
         $response = $this->get(route('domain.show', $id));
         $response->assertOk();
 
