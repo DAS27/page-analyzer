@@ -22,15 +22,16 @@ class DomainController extends Controller
         ]);
         if ($validator->fails()) {
             flash('Not a valid url')->error();
+            return redirect()->route('home');
         }
-        $domain = $validator->validate();
+        $domain = $validator->valid();
         $url = parse_url($domain['name']);
         ['scheme' => $scheme, 'host' => $host] = $url;
         $normalizedUrl = strtolower("{$scheme}://{$host}");
         $existingDomain = DB::table('domains')->where('name', $normalizedUrl)->first();
         if ($existingDomain) {
             flash('Url already exists')->warning();
-            return redirect()->route('domain.show', [$existingDomain->id]);
+            return redirect()->route('domain.show', ['id' => $existingDomain->id]);
         }
         $id = DB::table('domains')->insertGetId(
             [
@@ -40,7 +41,7 @@ class DomainController extends Controller
             ]
         );
         flash('Url has been added')->success();
-        return redirect()->route('domain.show', [$id]);
+        return redirect()->route('domain.show', ['id' => $id]);
     }
 
     public function show($id)
