@@ -2,20 +2,19 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Faker\Factory;
 use Tests\TestCase;
+use Faker\Generator;
 
 class DomainControllerTest extends TestCase
 {
-    protected $faker;
+    protected Generator $faker;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->faker = \Faker\Factory::create();
-//        $this->seed();
+        $this->faker = Factory::create();
+        $this->seed();
     }
 
     public function testIndex()
@@ -27,7 +26,7 @@ class DomainControllerTest extends TestCase
     public function testStore()
     {
         $url = $this->faker->url;
-        $response = $this->post(route('domains.store', $url));
+        $response = $this->post(route('domains.store', ['name' => $url]));
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
 
