@@ -19,8 +19,8 @@
                     <tbody>
                         <tr>
                             <td>{{ $domain->id }}</td>
-                            <td>{{ $domain->name }}</td>
-                            <td>{{ $domain->updated_at }}</td>
+                            <td><a href="{{ route('domain.show', $domain->id) }}">{{ $domain->name }}</a></td>
+                            <td>{{ $lastChecks[$domain->id]->created_at ?? ''}}</td>
                             <td>{{ 200 }}</td>
                         </tr>
                     </tbody>
