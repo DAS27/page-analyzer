@@ -3,19 +3,14 @@
 namespace Tests\Feature;
 
 use Faker\Factory;
-use Faker\Provider\Base;
+use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 use Faker\Generator;
 
 class DomainControllerTest extends TestCase
 {
-    protected Generator $faker;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->faker = Factory::create();
-    }
+    private const DOMAIN = ['name' => 'https://ru.hexlet.io/professions/php/projects/9'];
+    private const EXPECT_DOMAIN = ['name' => 'https://ru.hexlet.io'];
 
     public function testIndex()
     {
@@ -25,23 +20,18 @@ class DomainControllerTest extends TestCase
 
     public function testStore()
     {
-        $url = $this->faker->url;
-        $response = $this->post(route('domains.store', ['name' => $url]));
+        $response = $this->post(route('domains.store', self::DOMAIN));
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
-
-        $parsedUrl = parse_url($url);
-        ['scheme' => $scheme, 'host' => $host] = $parsedUrl;
-        $domainName = strtolower("{$scheme}://{$host}");
-        $this->assertDatabaseHas('domains', ['name' => $domainName]);
+        $this->assertDatabaseHas('domains', self::EXPECT_DOMAIN);
     }
 
     public function testShow()
     {
-        $id = Base::randomDigitNot(0);
-        $response = $this->get(route('domain.show', $id));
+        $domain = self::EXPECT_DOMAIN;
+        $id = DB::table('domains')->where('name', $domain['name'])->pluck('id')->all()[0];
+        $response = $this->get(route('domain.show', ['id' => $id]));
         $response->assertOk();
-
-        $this->assertDataBaseHas('domains', ['id' => $id]);
+        $this->assertDatabaseHas('domains', ['id' => $id]);
     }
 }
