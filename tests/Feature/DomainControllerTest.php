@@ -2,10 +2,8 @@
 
 namespace Tests\Feature;
 
-use Faker\Factory;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
-use Faker\Generator;
 
 class DomainControllerTest extends TestCase
 {
@@ -32,6 +30,15 @@ class DomainControllerTest extends TestCase
         $id = DB::table('domains')->where('name', $domain['name'])->pluck('id')->all()[0];
         $response = $this->get(route('domain.show', ['id' => $id]));
         $response->assertOk();
-        $this->assertDatabaseHas('domains', ['id' => $id]);
+    }
+
+    public function testCheck()
+    {
+        $domain = self::EXPECT_DOMAIN;
+        $id = DB::table('domains')->where('name', $domain['name'])->pluck('id')->all()[0];
+        $response = $this->post(route('domain.check', $id));
+        $response->assertSessionHasNoErrors();
+        $response->assertRedirect();
+        $this->assertDatabaseHas('domain_checks', ['domain_id' => $id]);
     }
 }
