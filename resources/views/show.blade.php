@@ -28,20 +28,34 @@
             </div>
 
             <h2 class="mt-5 mb-3">Checks</h2>
-            <form method="post" action="https://php-l3-page-analyzer.herokuapp.com/domains/285/checks">
+            <form method="post" action="{{ route('domain.check', $domain->id) }}">
                 @csrf
                 <input type="submit" class="btn btn-primary" value="Run check">
             </form>
             <table class="table table-bordered table-hover text-nowrap">
-                <tbody><tr>
-                    <th>Id</th>
-                    <th>Status Code</th>
-                    <th>h1</th>
-                    <th>Keywords</th>
-                    <th>Description</th>
-                    <th>Created At</th>
-                </tr>
-                </tbody></table>
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Status Code</th>
+                        <th>h1</th>
+                        <th>Keywords</th>
+                        <th>Description</th>
+                        <th>Created At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach($domainChecks as $check)
+                    <tr>
+                        <th>{{ $check->id }}</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th>{{ $check->created_at }}</th>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
         </div>
     </main>
 @endsection
