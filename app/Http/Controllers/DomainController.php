@@ -12,7 +12,13 @@ class DomainController extends Controller
     public function index()
     {
         $domains = DB::table('domains')->get();
-        return view('domains', compact('domains'));
+        $lastChecks = DB::table('domain_checks')
+            ->distinct('domain_id')
+            ->orderBy('domain_id')
+            ->orderBy('updated_at', 'asc')
+            ->get()
+            ->keyBy('domain_id');
+        return view('domains', compact('domains', 'lastChecks'));
     }
 
     public function store(Request $request)
@@ -47,6 +53,22 @@ class DomainController extends Controller
     public function show($id)
     {
         $domain = DB::table('domains')->find($id);
-        return view('show', compact('domain'));
+        $domainChecks = DB::table('domain_checks')
+            ->where('domain_id', $id)
+            ->paginate(10);
+        return view('show', compact('domain', 'domainChecks'));
+    }
+
+    public function check($id)
+    {
+        DB::table('domain_checks')->insert(
+            [
+                'domain_id' => $id,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ]
+        );
+        flash('Website has been checked!');
+        return redirect()->route('domain.show', ['id' => $id]);
     }
 }
