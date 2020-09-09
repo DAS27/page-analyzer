@@ -47,7 +47,7 @@
                 @foreach($domainChecks as $check)
                     <tr>
                         <th>{{ $check->id }}</th>
-                        <th></th>
+                        <th>{{ $check->status_code }}</th>
                         <th></th>
                         <th></th>
                         <th></th>
