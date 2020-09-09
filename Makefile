@@ -7,10 +7,6 @@ setup:
 	php artisan key:gen --ansi
 	touch database/database.sqlite||true
 	php artisan migrate
-	npm install
-
-watch:
-	npm run watch
 
 migrate:
 	php artisan migrate
@@ -36,23 +32,3 @@ lint:
 lint-fix:
 	composer phpcbf
 
-compose:
-	docker-compose up
-
-compose-test:
-	docker-compose run web make test
-
-compose-bash:
-	docker-compose run web bash
-
-compose-setup: compose-build
-	docker-compose run web make setup
-
-compose-build:
-	docker-compose build
-
-compose-db:
-	docker-compose exec db psql -U postgres
-
-compose-down:
-	docker-compose down -v
