@@ -2,11 +2,15 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 class DomainControllerTest extends TestCase
 {
+    use WithoutMiddleware;
+
     private const DOMAIN = ['name' => 'https://ru.hexlet.io/professions/php/projects/9'];
     private const EXPECT_DOMAIN = ['name' => 'https://ru.hexlet.io'];
 
@@ -35,6 +39,9 @@ class DomainControllerTest extends TestCase
     public function testCheck()
     {
         $domain = self::EXPECT_DOMAIN;
+        Http::fake([
+            $domain['name'] => Http::response(null, 500)
+        ]);
         $id = DB::table('domains')->where('name', $domain['name'])->pluck('id')->all()[0];
         $response = $this->post(route('domain.check', $id));
         $response->assertSessionHasNoErrors();
