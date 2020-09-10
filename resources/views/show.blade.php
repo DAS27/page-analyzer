@@ -32,30 +32,32 @@
                 @csrf
                 <input type="submit" class="btn btn-primary" value="Run check">
             </form>
-            <table class="table table-bordered table-hover text-nowrap">
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Status Code</th>
-                        <th>h1</th>
-                        <th>Keywords</th>
-                        <th>Description</th>
-                        <th>Created At</th>
-                    </tr>
-                </thead>
-                <tbody>
-                @foreach($domainChecks as $check)
-                    <tr>
-                        <th>{{ $check->id }}</th>
-                        <th>{{ $check->status_code }}</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th>{{ $check->created_at }}</th>
-                    </tr>
-                @endforeach
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover text-nowrap">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Status Code</th>
+                            <th>h1</th>
+                            <th>Keywords</th>
+                            <th>Description</th>
+                            <th>Created At</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($domainChecks as $check)
+                        <tr>
+                            <th>{{ $check->id }}</th>
+                            <th>{{ $check->status_code }}</th>
+                            <th>{{ $check->h1 }}</th>
+                            <th>{{ $check->keywords }}</th>
+                            <th>{{ $check->description }}</th>
+                            <th>{{ $check->created_at }}</th>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </main>
 @endsection
