@@ -65,7 +65,7 @@ class DomainController extends Controller
     {
         $domain = DB::table('domains')->find($id);
         $response = Http::get($domain->name);
-        $document = new Document($domain->name, true);
+        $document = new Document($response->body());
         $h1 = optional($document->first('h1'))->text();
         $keywords = optional($document->first('*[^name=keywords]'))->getAttribute('content');
         $description = optional($document->first('*[^name=description]'))->getAttribute('content');
