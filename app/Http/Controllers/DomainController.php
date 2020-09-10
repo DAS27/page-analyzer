@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DiDom\Document;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -64,11 +65,18 @@ class DomainController extends Controller
     {
         $domain = DB::table('domains')->find($id);
         $response = Http::get($domain->name);
+        $document = new Document($domain->name, true);
+        $h1 = optional($document->first('h1'))->text();
+        $keywords = optional($document->first('*[^name=keywords]'))->getAttribute('content');
+        $description = optional($document->first('*[^name=description]'))->getAttribute('content');
         $statusCode = $response->status();
         DB::table('domain_checks')->insert(
             [
                 'domain_id' => $id,
                 'status_code' => $statusCode,
+                'h1' => $h1,
+                'keywords' => $keywords,
+                'description' => $description,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ]
