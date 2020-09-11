@@ -2,7 +2,10 @@
 
 namespace Tests\Feature;
 
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
@@ -38,14 +41,23 @@ class DomainControllerTest extends TestCase
 
     public function testCheck()
     {
-        $domain = self::EXPECT_DOMAIN;
+        $domainName = Arr::get(self::EXPECT_DOMAIN, 'name');
+        $data = file_get_contents(__DIR__ . '/../fixtures/test.html');
         Http::fake([
-            $domain['name'] => Http::response(null, 500)
+            $domainName => Http::response($data, 404)
         ]);
-        $id = DB::table('domains')->where('name', $domain['name'])->pluck('id')->all()[0];
+        $id = DB::table('domains')->where('name', $domainName)->pluck('id')->all()[0];
         $response = $this->post(route('domain.check', $id));
+        $statusCode = DB::table('domain_checks')->where('domain_id', $id)->pluck('status_code')->all()[0];
+        $h1 = DB::table('domain_checks')->where('domain_id', $id)->pluck('h1')->all()[0];
+        $keywords = DB::table('domain_checks')->where('domain_id', $id)->pluck('keywords')->all()[0];
+        $description = DB::table('domain_checks')->where('domain_id', $id)->pluck('description')->all()[0];
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
         $this->assertDatabaseHas('domain_checks', ['domain_id' => $id]);
+        $this->assertDatabaseHas('domain_checks', ['status_code' => $statusCode]);
+        $this->assertDatabaseHas('domain_checks', ['h1' => $h1]);
+        $this->assertDatabaseHas('domain_checks', ['keywords' => $keywords]);
+        $this->assertDatabaseHas('domain_checks', ['description' => $description]);
     }
 }
