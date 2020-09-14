@@ -2,10 +2,9 @@
 
 namespace Tests\Feature;
 
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\Psr7\Response;
+use Faker\Factory;
+use Faker\Provider\Base;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
@@ -16,6 +15,13 @@ class DomainControllerTest extends TestCase
 
     private const DOMAIN = ['name' => 'https://ru.hexlet.io/professions/php/projects/9'];
     private const EXPECT_DOMAIN = ['name' => 'https://ru.hexlet.io'];
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->faker = Factory::create();
+        $this->seed();
+    }
 
     public function testIndex()
     {
@@ -33,15 +39,14 @@ class DomainControllerTest extends TestCase
 
     public function testShow()
     {
-        $domain = self::EXPECT_DOMAIN;
-        $id = DB::table('domains')->where('name', $domain['name'])->pluck('id')->all()[0];
-        $response = $this->get(route('domain.show', ['id' => $id]));
+        $id = Base::randomDigitNot(0);
+        $response = $this->get(route('domain.show', $id));
         $response->assertOk();
     }
 
     public function testCheck()
     {
-        $domainName = Arr::get(self::EXPECT_DOMAIN, 'name');
+        $domainName = DB::table('domains')->inRandomOrder()->first('name')->name;
         $data = file_get_contents(__DIR__ . '/../fixtures/test.html');
         Http::fake([
             $domainName => Http::response($data, 404)
