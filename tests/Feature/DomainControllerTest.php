@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use Faker\Factory;
 use Faker\Provider\Base;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -11,6 +12,7 @@ use Tests\TestCase;
 
 class DomainControllerTest extends TestCase
 {
+    use DatabaseMigrations;
     use WithoutMiddleware;
 
     private const DOMAIN = ['name' => 'https://ru.hexlet.io/professions/php/projects/9'];
