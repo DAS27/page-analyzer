@@ -65,6 +65,7 @@ class DomainController extends Controller
     public function check($id)
     {
         $domain = DB::table('domains')->find($id);
+        abort_unless($domain, 404);
         try {
             $response = Http::get($domain->name);
             $document = new Document($response->body());
