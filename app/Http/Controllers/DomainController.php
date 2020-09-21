@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use DiDom\Document;
-use DiDom\Exceptions\InvalidSelectorException;
+use GuzzleHttp\Exception\RequestException;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -31,16 +31,19 @@ class DomainController extends Controller
         ]);
         if ($validator->fails()) {
             flash('Not a valid url')->error();
-            return redirect()->route('home');
+            return redirect()
+                ->route('home')
+                ->withInput()
+                ->withErrors($validator);
         }
         $domain = $validator->valid();
         $url = parse_url($domain['name']);
         ['scheme' => $scheme, 'host' => $host] = $url;
         $normalizedUrl = strtolower("{$scheme}://{$host}");
-        $existingDomain = DB::table('domains')->where('name', $normalizedUrl)->first();
-        if ($existingDomain) {
+        $domain = DB::table('domains')->where('name', $normalizedUrl)->first();
+        if ($domain) {
             flash('Url already exists')->warning();
-            return redirect()->route('domain.show', ['id' => $existingDomain->id]);
+            return redirect()->route('domain.show', ['id' => $domain->id]);
         }
         $id = DB::table('domains')->insertGetId(
             [
@@ -56,6 +59,7 @@ class DomainController extends Controller
     public function show($id)
     {
         $domain = DB::table('domains')->find($id);
+        abort_unless($domain, 404);
         $domainChecks = DB::table('domain_checks')
             ->where('domain_id', $id)
             ->paginate(10);
@@ -84,9 +88,10 @@ class DomainController extends Controller
                     'updated_at' => Carbon::now()
                 ]
             );
-        } catch (InvalidSelectorException $e) {
+            flash('Website has been checked!');
+        } catch (RequestException $e) {
+            flash('Website not found')->error();
         }
-        flash('Website has been checked!');
         return redirect()->route('domain.show', ['id' => $id]);
     }
 }
