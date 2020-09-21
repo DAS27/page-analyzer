@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use DiDom\Document;
 use GuzzleHttp\Exception\RequestException;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -91,6 +92,8 @@ class DomainController extends Controller
             flash('Website has been checked!');
         } catch (RequestException $e) {
             flash('Website not found')->error();
+        } catch (ConnectionException $e) {
+            flash('Oops something went wrong')->error();
         }
         return redirect()->route('domain.show', ['id' => $id]);
     }
