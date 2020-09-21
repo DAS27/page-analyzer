@@ -12,7 +12,7 @@
                         <p class="lead">Check web pages for free</p>
                         <form action="{{ route('domains.store') }}" method="post" class="d-flex justify-content-center">
                             @csrf
-                            <input type="text" name="name" value="" class="form-control form-control-lg" placeholder="https://www.example.com">
+                            <input type="text" name="name" class="form-control form-control-lg" placeholder="https://www.example.com" value="{!! old('name') !!}">
                             <button type="submit" class="btn btn-lg btn-primary ml-3 px-5 text-uppercase">Check</button>
                         </form>
                     </div>
