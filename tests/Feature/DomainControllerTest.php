@@ -49,9 +49,7 @@ class DomainControllerTest extends TestCase
         ]);
         $id = DB::table('domains')->where('name', $domainName)->pluck('id')->first();
         $response = $this->post(route('domain.check', $id));
-        $h1 = ['h1' => 'This is H1'];
-        $description = ['description' => 'This is Description'];
-        $expect = array_merge($h1, $description);
+        $expect = ['h1' => 'This is H1', 'description' => 'This is Description'];
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
         $this->assertDatabaseHas('domain_checks', $expect);
