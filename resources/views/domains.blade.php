@@ -27,6 +27,11 @@
                     @endforeach
                 </table>
             </div>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    {{ $domains->links() }}
+                </ul>
+            </nav>
         </div>
     </main>
 @endsection
