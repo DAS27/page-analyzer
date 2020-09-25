@@ -4,8 +4,6 @@ namespace Tests\Feature;
 
 use Faker\Factory;
 use Faker\Provider\Base;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 class DomainControllerTest extends TestCase
@@ -38,20 +36,5 @@ class DomainControllerTest extends TestCase
         $id = Base::randomDigitNot(0);
         $response = $this->get(route('domain.show', $id));
         $response->assertOk();
-    }
-
-    public function testCheck()
-    {
-        $domainName = DB::table('domains')->inRandomOrder()->first('name')->name;
-        $data = file_get_contents(__DIR__ . '/../fixtures/test.html');
-        Http::fake([
-            $domainName => Http::response($data, 200)
-        ]);
-        $id = DB::table('domains')->where('name', $domainName)->pluck('id')->first();
-        $response = $this->post(route('domain.check', $id));
-        $expect = ['h1' => 'This is H1', 'description' => 'This is Description'];
-        $response->assertSessionHasNoErrors();
-        $response->assertRedirect();
-        $this->assertDatabaseHas('domain_checks', $expect);
     }
 }
