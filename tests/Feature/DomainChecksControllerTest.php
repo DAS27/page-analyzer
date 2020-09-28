@@ -24,7 +24,7 @@ class DomainChecksController extends TestCase
             $domainName => Http::response($data, 200)
         ]);
         $id = DB::table('domains')->where('name', $domainName)->pluck('id')->first();
-        $response = $this->post(route('domain.check', $id));
+        $response = $this->post(route('domain.check.store', $id));
         $expect = ['h1' => 'This is H1', 'description' => 'This is Description'];
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
