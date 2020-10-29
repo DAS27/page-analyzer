@@ -18,7 +18,6 @@
     @yield('content')
 
     @include('inc.footer')
-</body>
 <div id="wt-sky-root"></div>
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
